@@ -42,9 +42,9 @@ async fn main() {
     let render_target = render_target(PORTRAIT_W as u32, PORTRAIT_H as u32);
     render_target.texture.set_filter(FilterMode::Nearest);
 
-    let mut camera =
-        Camera2D::from_display_rect(Rect::new(0.0, 0.0, PORTRAIT_W as f32, PORTRAIT_H as f32));
-    camera.render_target = Some(render_target.clone());
+    // let mut camera =
+    //     Camera2D::from_display_rect(Rect::new(0.0, 0.0, PORTRAIT_W as f32, PORTRAIT_H as f32));
+    // camera.render_target = Some(render_target.clone());
 
     loop {
         // Collect input: on-screen buttons take priority, then keyboard
@@ -55,28 +55,28 @@ async fn main() {
         game.update(get_frame_time());
 
         // Draw game content into the render target at logical resolution
-        set_camera(&camera);
+        //set_camera(&camera);
         clear_background(BLACK);
         game.draw();
         buttons.draw();
 
         // Scale the render target up to fill the window
-        set_default_camera();
-        clear_background(BLACK);
-        draw_texture_ex(
-            &render_target.texture,
-            0.0,
-            0.0,
-            WHITE,
-            DrawTextureParams {
-                dest_size: Some(Vec2::new(
-                    PORTRAIT_W as f32 * SCALE,
-                    PORTRAIT_H as f32 * SCALE,
-                )),
-                flip_y: true,
-                ..Default::default()
-            },
-        );
+        //set_default_camera();
+        //clear_background(BLACK);
+        // draw_texture_ex(
+        //     &render_target.texture,
+        //     0.0,
+        //     0.0,
+        //     WHITE,
+        //     DrawTextureParams {
+        //         dest_size: Some(Vec2::new(
+        //             PORTRAIT_W as f32 * SCALE,
+        //             PORTRAIT_H as f32 * SCALE,
+        //         )),
+        //         flip_y: true,
+        //         ..Default::default()
+        //     },
+        // );
 
         buttons_state.advance();
         next_frame().await;
