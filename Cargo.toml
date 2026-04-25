@@ -1,0 +1,11 @@
+[package]
+name = "rpg_2026"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+macroquad = "0.4"
+
+[profile.release]
+opt-level = "z"
+lto = true
