@@ -39,8 +39,8 @@ async fn main() {
 
     let mut buttons_state = ButtonsState::new();
 
-    let render_target = render_target(PORTRAIT_W as u32, PORTRAIT_H as u32);
-    render_target.texture.set_filter(FilterMode::Nearest);
+    // let render_target = render_target(PORTRAIT_W as u32, PORTRAIT_H as u32);
+    // render_target.texture.set_filter(FilterMode::Nearest);
 
     // let mut camera =
     //     Camera2D::from_display_rect(Rect::new(0.0, 0.0, PORTRAIT_W as f32, PORTRAIT_H as f32));
@@ -56,7 +56,7 @@ async fn main() {
 
         // Draw game content into the render target at logical resolution
         //set_camera(&camera);
-        clear_background(BLACK);
+        //clear_background(BLACK);
         game.draw();
         buttons.draw();
 
