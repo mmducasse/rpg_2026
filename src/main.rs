@@ -17,7 +17,7 @@ const GAME_SIZE_W: i32 = 16 * 10;
 const GAME_SIZE_H: i32 = 16 * 9;
 const PORTRAIT_W: i32 = GAME_SIZE_W;
 const PORTRAIT_H: i32 = PORTRAIT_W * 3 / 2;
-const SCALE: f32 = 3.0;
+const SCALE: f32 = 1.0; //3.0;
 
 fn window_conf() -> Conf {
     Conf {
