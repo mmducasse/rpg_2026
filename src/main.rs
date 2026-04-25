@@ -80,5 +80,9 @@ async fn main() {
 
         buttons_state.advance();
         next_frame().await;
+
+        if is_key_down(KeyCode::Escape) {
+            return;
+        }
     }
 }

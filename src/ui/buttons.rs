@@ -73,7 +73,11 @@ impl Buttons {
         }
 
         // Touch input (for mobile/browser)
-        let phases = [TouchPhase::Started, TouchPhase::Moved, TouchPhase::Stationary];
+        let phases = [
+            TouchPhase::Started,
+            TouchPhase::Moved,
+            TouchPhase::Stationary,
+        ];
         for touch in touches() {
             if phases.contains(&touch.phase) {
                 for btn in &self.buttons {
