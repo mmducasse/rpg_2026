@@ -1,6 +1,6 @@
-use std::collections::VecDeque;
-use macroquad::prelude::*;
 use crate::ui::buttons::ButtonEvent;
+use macroquad::prelude::*;
+use std::collections::VecDeque;
 
 const GRID_SIZE: i32 = 20;
 const MOVE_INTERVAL: f32 = 0.15;
@@ -126,11 +126,7 @@ impl Game {
         let new_head = (head.0 + dx, head.1 + dy);
 
         // Wall collision
-        if new_head.0 < 0
-            || new_head.0 >= GRID_SIZE
-            || new_head.1 < 0
-            || new_head.1 >= GRID_SIZE
-        {
+        if new_head.0 < 0 || new_head.0 >= GRID_SIZE || new_head.1 < 0 || new_head.1 >= GRID_SIZE {
             self.state = GameState::GameOver;
             return;
         }

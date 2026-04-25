@@ -46,12 +46,12 @@ impl Buttons {
         };
 
         let buttons = vec![
-            make(dpad_cx,          dpad_cy - stride, "U", ButtonEvent::Up,    dpad),
-            make(dpad_cx,          dpad_cy + stride, "D", ButtonEvent::Down,  dpad),
-            make(dpad_cx - stride, dpad_cy,          "L", ButtonEvent::Left,  dpad),
-            make(dpad_cx + stride, dpad_cy,          "R", ButtonEvent::Right, dpad),
-            make(a_cx,             action_cy,        "A", ButtonEvent::A,     a_col),
-            make(b_cx,             action_cy,        "B", ButtonEvent::B,     b_col),
+            make(dpad_cx, dpad_cy - stride, "U", ButtonEvent::Up, dpad),
+            make(dpad_cx, dpad_cy + stride, "D", ButtonEvent::Down, dpad),
+            make(dpad_cx - stride, dpad_cy, "L", ButtonEvent::Left, dpad),
+            make(dpad_cx + stride, dpad_cy, "R", ButtonEvent::Right, dpad),
+            make(a_cx, action_cy, "A", ButtonEvent::A, a_col),
+            make(b_cx, action_cy, "B", ButtonEvent::B, b_col),
         ];
 
         Self { buttons, view_rect }
