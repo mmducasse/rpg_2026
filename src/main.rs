@@ -1,14 +1,18 @@
 #![allow(dead_code)]
 #![allow(unused)]
 
-use macroquad::prelude::*;
-
 mod common;
 mod input;
 mod objects;
 mod ui;
 
+use macroquad::input::{KeyCode, is_key_down};
+use macroquad::time::get_frame_time;
+use macroquad::window::{Conf, next_frame};
+
+use crate::common::anim::pane::Pane;
 use crate::common::num::irect::rect;
+use crate::common::num::ivec2::{IVec2, i2};
 use crate::input::buttons::ButtonsState;
 use crate::ui::buttons::Buttons;
 use crate::ui::game::Game;
@@ -17,7 +21,8 @@ const GAME_SIZE_W: i32 = 16 * 10;
 const GAME_SIZE_H: i32 = 16 * 9;
 const PORTRAIT_W: i32 = GAME_SIZE_W;
 const PORTRAIT_H: i32 = PORTRAIT_W * 3 / 2;
-const SCALE: f32 = 1.0; //3.0;
+const WINDOW_SIZE: IVec2 = i2(PORTRAIT_W, PORTRAIT_H);
+const SCALE: f32 = 3.0;
 
 fn window_conf() -> Conf {
     Conf {
@@ -33,6 +38,11 @@ fn window_conf() -> Conf {
 async fn main() {
     let game_rect = rect(0, 0, GAME_SIZE_W, GAME_SIZE_H);
     let buttons_rect = rect(0, GAME_SIZE_H, PORTRAIT_W, PORTRAIT_H - GAME_SIZE_H);
+
+    let window_pane = Pane::new(WINDOW_SIZE, SCALE);
+    let child_panes = window_pane.split_y(&[GAME_SIZE_H]);
+    let game_pane = child_panes[0].clone();
+    let buttons_pane = child_panes[1].clone();
 
     let mut game = Game::new(game_rect);
     let buttons = Buttons::new(buttons_rect);
@@ -57,8 +67,10 @@ async fn main() {
         // Draw game content into the render target at logical resolution
         //set_camera(&camera);
         //clear_background(BLACK);
-        game.draw();
-        buttons.draw();
+        // game.draw();
+        // buttons.draw();
+        game_pane.clear_background(macroquad::color::YELLOW);
+        buttons_pane.clear_background(macroquad::color::BLUE);
 
         // Scale the render target up to fill the window
         //set_default_camera();
