@@ -1,5 +1,6 @@
 use macroquad::prelude::*;
 
+mod objects;
 mod ui;
 
 use crate::ui::buttons::{ButtonEvent, Buttons};
