@@ -5,6 +5,7 @@ edition = "2024"
 
 [dependencies]
 macroquad = "0.4"
+serde = "1.0"
 
 [profile.release]
 opt-level = "z"

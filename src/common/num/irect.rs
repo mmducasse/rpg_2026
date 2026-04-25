@@ -3,7 +3,7 @@ use std::ops::Div;
 use macroquad::prelude::Rect;
 
 use super::{
-    ivec2::{i2, IVec2},
+    ivec2::{IVec2, i2},
     range::Range,
 };
 

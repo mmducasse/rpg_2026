@@ -1,4 +1,4 @@
-use super::ivec2::{i2, IVec2};
+use super::ivec2::{IVec2, i2};
 
 pub fn lerp(a: i32, b: i32, f: f32) -> i32 {
     let x0;
@@ -29,11 +29,7 @@ pub fn lerp_p(a: IVec2, b: IVec2, f: f32) -> IVec2 {
 }
 
 pub const fn mod_(x: i32, d: i32) -> i32 {
-    if x >= 0 {
-        x % d
-    } else {
-        (d + x) % d
-    }
+    if x >= 0 { x % d } else { (d + x) % d }
 }
 
 pub const fn mod_p(p: IVec2, d: IVec2) -> IVec2 {

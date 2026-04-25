@@ -1,15 +1,15 @@
-use crate::{input::buttons::ButtonsState, objects::player::Player};
+use crate::{common::num::irect::IRect, input::buttons::ButtonsState, objects::player::Player};
 use macroquad::prelude::*;
 
 pub struct Game {
-    game_rect: Rect,
+    game_rect: IRect,
     player: Player,
 }
 
 impl Game {
-    pub fn new(game_rect: Rect) -> Self {
+    pub fn new(game_rect: IRect) -> Self {
         Self {
-            player: Player::new(game_rect),
+            player: Player::new(game_rect.as_rect()),
             game_rect,
         }
     }
@@ -22,10 +22,10 @@ impl Game {
 
     pub fn draw(&self) {
         draw_rectangle(
-            self.game_rect.x,
-            self.game_rect.y,
-            self.game_rect.w,
-            self.game_rect.h,
+            self.game_rect.x() as f32,
+            self.game_rect.y() as f32,
+            self.game_rect.w() as f32,
+            self.game_rect.h() as f32,
             Color::from_rgba(20, 30, 20, 255),
         );
         self.player.draw();

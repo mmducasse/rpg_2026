@@ -1,11 +1,11 @@
 use crate::common::num::{
     fvec2::FVec2,
-    irect::{ir, IRect},
+    irect::{IRect, ir},
     ivec2::IVec2,
 };
 use macroquad::{
-    prelude::{set_camera, set_default_camera, Camera2D, Rect, Vec2, WHITE},
-    texture::{draw_texture_ex, render_target, DrawTextureParams, FilterMode, Texture2D},
+    prelude::{Camera2D, Rect, Vec2, WHITE, set_camera, set_default_camera},
+    texture::{DrawTextureParams, FilterMode, Texture2D, draw_texture_ex, render_target},
     window::request_new_screen_size,
 };
 

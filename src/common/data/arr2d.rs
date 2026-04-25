@@ -2,7 +2,7 @@ use std::slice::IterMut;
 
 use crate::common::num::{
     irect::IRect,
-    ivec2::{i2, IVec2},
+    ivec2::{IVec2, i2},
 };
 
 pub struct Arr2D<T> {
@@ -12,7 +12,10 @@ pub struct Arr2D<T> {
 
 impl<T> Arr2D<T> {
     pub fn empty() -> Self {
-        Self { data: vec![], width: 0 }
+        Self {
+            data: vec![],
+            width: 0,
+        }
     }
 
     pub fn new(data: Vec<T>, width: usize) -> Self {

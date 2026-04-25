@@ -2,7 +2,7 @@ use std::{hash::Hash, rc::Rc};
 
 use crate::common::{
     num::{
-        irect::{ir, IRect},
+        irect::{IRect, ir},
         ivec2::IVec2,
     },
     time::time::delta_s,
@@ -23,11 +23,7 @@ impl<T> Animator<T>
 where
     T: Eq + Hash + Clone,
 {
-    pub fn new(
-        start_key: T,
-        tile_size: IVec2,
-        animations: Rc<AnimationMap<T>>,
-    ) -> Self {
+    pub fn new(start_key: T, tile_size: IVec2, animations: Rc<AnimationMap<T>>) -> Self {
         Self {
             curr_key: start_key.clone(),
             curr_time_s: 0.0,
@@ -93,9 +89,16 @@ where
 }
 
 impl<T> Clone for Animator<T>
-where T: Clone
+where
+    T: Clone,
 {
     fn clone(&self) -> Self {
-        Self { curr_key: self.curr_key.clone(), curr_time_s: self.curr_time_s.clone(), default_key: self.default_key.clone(), tile_size: self.tile_size.clone(), animations: self.animations.clone() }
+        Self {
+            curr_key: self.curr_key.clone(),
+            curr_time_s: self.curr_time_s.clone(),
+            default_key: self.default_key.clone(),
+            tile_size: self.tile_size.clone(),
+            animations: self.animations.clone(),
+        }
     }
 }

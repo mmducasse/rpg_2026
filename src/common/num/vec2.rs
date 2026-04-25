@@ -55,10 +55,14 @@ where
 }
 
 impl<T> Default for Vec2<T>
-where T: Default
+where
+    T: Default,
 {
     fn default() -> Self {
-        Self { x: Default::default(), y: Default::default() }
+        Self {
+            x: Default::default(),
+            y: Default::default(),
+        }
     }
 }
 
@@ -222,8 +226,8 @@ where
 }
 
 impl<T> Rem<Vec2<T>> for Vec2<T>
-where 
-    T: Copy + Rem<T, Output = T>
+where
+    T: Copy + Rem<T, Output = T>,
 {
     type Output = Vec2<T>;
 
@@ -236,8 +240,8 @@ where
 }
 
 impl<T> Rem<T> for Vec2<T>
-where 
-    T: Copy + Rem<T, Output = T>
+where
+    T: Copy + Rem<T, Output = T>,
 {
     type Output = Vec2<T>;
 

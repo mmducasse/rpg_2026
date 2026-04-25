@@ -17,11 +17,7 @@ impl DirH {
     }
 
     pub fn from_x(x: i32) -> DirH {
-        if x < 0 {
-            DirH::L
-        } else {
-            DirH::R
-        }
+        if x < 0 { DirH::L } else { DirH::R }
     }
 
     pub fn unit(self) -> IVec2 {

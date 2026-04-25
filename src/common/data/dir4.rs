@@ -17,7 +17,7 @@ use Dir4::*;
 
 use crate::common::num::{
     fvec2::FVec2,
-    ivec2::{i2, IVec2},
+    ivec2::{IVec2, i2},
     math::mod_,
 };
 

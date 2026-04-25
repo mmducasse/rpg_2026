@@ -1,8 +1,8 @@
 use std::{collections::HashMap, hash::Hash};
 
 use crate::common::{
-    data::{dir4::Dir4, dir_h::DirH},
-    num::ivec2::{i2, IVec2},
+    data::{dir_h::DirH, dir4::Dir4},
+    num::ivec2::{IVec2, i2},
 };
 
 use super::animation::Animation;

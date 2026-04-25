@@ -102,7 +102,8 @@ where
 }
 
 impl<T> Div<T> for Range<T>
-where T: Div<T, Output = T> + Clone
+where
+    T: Div<T, Output = T> + Clone,
 {
     type Output = Self;
 

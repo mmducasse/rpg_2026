@@ -1,6 +1,6 @@
 use crate::common::{
     data::arr2d::Arr2D,
-    num::ivec2::{i2, IVec2},
+    num::ivec2::{IVec2, i2},
 };
 
 use super::{

@@ -1,4 +1,4 @@
-use macroquad::input::{KeyCode, is_key_pressed};
+use macroquad::input::{KeyCode, is_key_down, is_key_pressed};
 
 const NUM_BUTTONS: usize = 6;
 
@@ -76,7 +76,7 @@ impl ButtonsState {
 /// Maps keyboard keys to button events for desktop convenience.
 fn put_keyboard_events(events: &mut [bool; NUM_BUTTONS]) {
     let mut check = |button_event: ButtonId, key_code: KeyCode| {
-        if is_key_pressed(key_code) {
+        if is_key_down(key_code) {
             events[button_event.idx()] = true;
         }
     };

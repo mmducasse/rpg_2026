@@ -25,7 +25,7 @@ impl<T> Queue<T> {
         self.in_.len() + self.out_.len()
     }
 
-    /// Iterates over the elements of the queue, 
+    /// Iterates over the elements of the queue,
     /// from front to back.
     pub fn iter(&self) -> impl Iterator<Item = &T> {
         self.out_.iter().rev().chain(self.in_.iter())

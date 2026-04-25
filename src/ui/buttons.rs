@@ -1,6 +1,10 @@
 use macroquad::prelude::*;
 
-use crate::input::buttons::{ButtonId, ButtonsState};
+use crate::{
+    SCALE,
+    common::num::irect::IRect,
+    input::buttons::{ButtonId, ButtonsState},
+};
 
 struct ButtonDef {
     rect: Rect,
@@ -15,7 +19,13 @@ pub struct Buttons {
 }
 
 impl Buttons {
-    pub fn new(view_rect: Rect) -> Self {
+    pub fn new(view_rect: IRect) -> Self {
+        let view_rect = Rect::new(
+            view_rect.x() as f32,
+            view_rect.y() as f32,
+            view_rect.w() as f32,
+            view_rect.h() as f32,
+        );
         let btn_size = view_rect.h * 0.275;
         let stride = view_rect.h * 0.30;
 
@@ -51,9 +61,9 @@ impl Buttons {
 
     pub fn update(&self, buttons_state: &mut ButtonsState) {
         // Mouse click
-        if is_mouse_button_pressed(MouseButton::Left) {
+        if is_mouse_button_down(MouseButton::Left) {
             let (mx, my) = mouse_position();
-            let pos = Vec2::new(mx, my);
+            let pos = Vec2::new(mx / SCALE, my / SCALE);
             for btn in &self.buttons {
                 if btn.rect.contains(pos) {
                     //return Some(btn.event);
@@ -63,8 +73,9 @@ impl Buttons {
         }
 
         // Touch input (for mobile/browser)
+        let phases = [TouchPhase::Started, TouchPhase::Moved, TouchPhase::Stationary];
         for touch in touches() {
-            if touch.phase == TouchPhase::Started {
+            if phases.contains(&touch.phase) {
                 for btn in &self.buttons {
                     if btn.rect.contains(touch.position) {
                         //return Some(btn.event);

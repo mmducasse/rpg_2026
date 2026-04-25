@@ -1,5 +1,5 @@
 #[cfg(test)]
-use crate::common::num::ivec2::{i2, IVec2};
+use crate::common::num::ivec2::{IVec2, i2};
 
 #[test]
 fn struct_of_i32() {

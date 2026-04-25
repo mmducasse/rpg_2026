@@ -48,8 +48,8 @@ where
 }
 
 impl<T> Limit<T>
-where 
-    T: PartialEq
+where
+    T: PartialEq,
 {
     #[inline]
     pub fn is_at_min(&self) -> bool {

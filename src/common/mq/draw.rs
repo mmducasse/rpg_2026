@@ -1,6 +1,6 @@
 use macroquad::{
     prelude::{Color, WHITE},
-    texture::{draw_texture_ex, DrawTextureParams},
+    texture::{DrawTextureParams, draw_texture_ex},
 };
 
 use crate::common::num::{irect::IRect, ivec2::IVec2};
