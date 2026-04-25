@@ -1,19 +1,11 @@
 use macroquad::prelude::*;
 
-#[derive(Clone, Copy, Debug, PartialEq)]
-pub enum ButtonEvent {
-    Up,
-    Down,
-    Left,
-    Right,
-    A,
-    B,
-}
+use crate::input::buttons::{ButtonId, ButtonsState};
 
 struct ButtonDef {
     rect: Rect,
     label: &'static str,
-    event: ButtonEvent,
+    event: ButtonId,
     color: Color,
 }
 
@@ -46,25 +38,26 @@ impl Buttons {
         };
 
         let buttons = vec![
-            make(dpad_cx, dpad_cy - stride, "U", ButtonEvent::Up, dpad),
-            make(dpad_cx, dpad_cy + stride, "D", ButtonEvent::Down, dpad),
-            make(dpad_cx - stride, dpad_cy, "L", ButtonEvent::Left, dpad),
-            make(dpad_cx + stride, dpad_cy, "R", ButtonEvent::Right, dpad),
-            make(a_cx, action_cy, "A", ButtonEvent::A, a_col),
-            make(b_cx, action_cy, "B", ButtonEvent::B, b_col),
+            make(dpad_cx, dpad_cy - stride, "U", ButtonId::Up, dpad),
+            make(dpad_cx, dpad_cy + stride, "D", ButtonId::Down, dpad),
+            make(dpad_cx - stride, dpad_cy, "L", ButtonId::Left, dpad),
+            make(dpad_cx + stride, dpad_cy, "R", ButtonId::Right, dpad),
+            make(a_cx, action_cy, "A", ButtonId::A, a_col),
+            make(b_cx, action_cy, "B", ButtonId::B, b_col),
         ];
 
         Self { buttons, view_rect }
     }
 
-    pub fn update(&self) -> Option<ButtonEvent> {
+    pub fn update(&self, buttons_state: &mut ButtonsState) {
         // Mouse click
         if is_mouse_button_pressed(MouseButton::Left) {
             let (mx, my) = mouse_position();
             let pos = Vec2::new(mx, my);
             for btn in &self.buttons {
                 if btn.rect.contains(pos) {
-                    return Some(btn.event);
+                    //return Some(btn.event);
+                    buttons_state.set_button_state(btn.event, true);
                 }
             }
         }
@@ -74,13 +67,12 @@ impl Buttons {
             if touch.phase == TouchPhase::Started {
                 for btn in &self.buttons {
                     if btn.rect.contains(touch.position) {
-                        return Some(btn.event);
+                        //return Some(btn.event);
+                        buttons_state.set_button_state(btn.event, true);
                     }
                 }
             }
         }
-
-        None
     }
 
     pub fn draw(&self) {

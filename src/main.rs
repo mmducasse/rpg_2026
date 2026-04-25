@@ -1,9 +1,14 @@
+#![allow(dead_code)]
+#![allow(unused)]
+
 use macroquad::prelude::*;
 
+mod input;
 mod objects;
 mod ui;
 
-use crate::ui::buttons::{ButtonEvent, Buttons};
+use crate::input::buttons::ButtonsState;
+use crate::ui::buttons::Buttons;
 use crate::ui::game::Game;
 
 const PORTRAIT_W: f32 = 400.0;
@@ -28,13 +33,14 @@ async fn main() {
     let mut game = Game::new(game_rect);
     let buttons = Buttons::new(buttons_rect);
 
+    let mut buttons_state = ButtonsState::new();
+
     loop {
         // Collect input: on-screen buttons take priority, then keyboard
-        let event: Option<ButtonEvent> = buttons.update().or_else(|| keyboard_event());
+        buttons_state.add_keyboard_state();
+        buttons.update(&mut buttons_state);
 
-        if let Some(ev) = event {
-            game.handle_button(ev);
-        }
+        game.handle_buttons(&buttons_state);
 
         game.update(get_frame_time());
 
@@ -42,23 +48,7 @@ async fn main() {
         game.draw();
         buttons.draw();
 
+        buttons_state.advance();
         next_frame().await;
-    }
-}
-
-/// Maps keyboard keys to button events for desktop convenience.
-fn keyboard_event() -> Option<ButtonEvent> {
-    if is_key_pressed(KeyCode::Up) || is_key_pressed(KeyCode::W) {
-        Some(ButtonEvent::Up)
-    } else if is_key_pressed(KeyCode::Down) || is_key_pressed(KeyCode::S) {
-        Some(ButtonEvent::Down)
-    } else if is_key_pressed(KeyCode::Left) || is_key_pressed(KeyCode::A) {
-        Some(ButtonEvent::Left)
-    } else if is_key_pressed(KeyCode::Right) || is_key_pressed(KeyCode::D) {
-        Some(ButtonEvent::Right)
-    } else if is_key_pressed(KeyCode::Enter) || is_key_pressed(KeyCode::Space) {
-        Some(ButtonEvent::A)
-    } else {
-        None
     }
 }

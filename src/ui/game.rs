@@ -1,5 +1,4 @@
-use crate::objects::player::Player;
-use crate::ui::buttons::ButtonEvent;
+use crate::{input::buttons::ButtonsState, objects::player::Player};
 use macroquad::prelude::*;
 
 pub struct Game {
@@ -15,8 +14,8 @@ impl Game {
         }
     }
 
-    pub fn handle_button(&mut self, event: ButtonEvent) {
-        self.player.update(Some(event));
+    pub fn handle_buttons(&mut self, buttons_state: &ButtonsState) {
+        self.player.update(buttons_state);
     }
 
     pub fn update(&mut self, _dt: f32) {}
