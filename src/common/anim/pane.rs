@@ -22,7 +22,7 @@ impl Pane {
         }
     }
 
-    pub fn child(&self, rel_bounds: IRect) -> Self {
+    pub fn new_child(&self, rel_bounds: IRect) -> Self {
         Self {
             abs_bounds: rel_bounds.offset_by(self.abs_bounds.pos),
             scale: self.scale,
@@ -33,29 +33,19 @@ impl Pane {
         self.abs_bounds
     }
 
-    pub fn split_y(&self, sizes_y: &[i32]) -> Vec<Self> {
+    pub fn split_y(&self, section_heights: &[i32]) -> Vec<Self> {
         let mut offset_y = 0;
         let mut children = vec![];
 
         let w = self.abs_bounds.w();
 
-        for size_y in sizes_y {
-            let y = offset_y;
-            let h = *size_y;
-
-            let rel_bounds = rect(0, y, w, h);
-
-            children.push(self.child(rel_bounds));
-
-            offset_y += *size_y;
+        for h in section_heights {
+            children.push(self.new_child(rect(0, offset_y, w, *h)));
+            offset_y += *h;
         }
 
-        let y = offset_y;
         let h = self.abs_bounds.h() - offset_y;
-
-        let rel_bounds = rect(0, y, w, h);
-
-        children.push(self.child(rel_bounds));
+        children.push(self.new_child(rect(0, offset_y, w, h)));
 
         children
     }
