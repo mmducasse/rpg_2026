@@ -1,73 +1,94 @@
-use macroquad::prelude::*;
+use macroquad::{
+    color::{BLACK, Color},
+    input::{MouseButton, TouchPhase, is_mouse_button_down, mouse_position, touches},
+};
 
 use crate::{
     SCALE,
-    common::num::irect::IRect,
+    common::{
+        anim::pane::Pane,
+        num::{
+            fvec2::f2,
+            irect::{IRect, ir, rect},
+            ivec2::{IVec2, i2},
+        },
+    },
     input::buttons::{ButtonId, ButtonsState},
 };
 
+const BUTTON_SIZE: IVec2 = IVec2::splat(16);
+
 struct ButtonDef {
-    rect: Rect,
-    label: &'static str,
-    event: ButtonId,
+    rect: IRect,
+    id: ButtonId,
     color: Color,
 }
 
-pub struct Buttons {
+pub struct ButtonsUI {
     buttons: Vec<ButtonDef>,
-    view_rect: Rect,
+    view_rect: IRect,
 }
 
-impl Buttons {
+impl ButtonsUI {
     pub fn new(view_rect: IRect) -> Self {
-        let view_rect = Rect::new(
+        let view_rect = macroquad::math::Rect::new(
             view_rect.x() as f32,
             view_rect.y() as f32,
             view_rect.w() as f32,
             view_rect.h() as f32,
         );
-        let btn_size = view_rect.h * 0.275;
-        let stride = view_rect.h * 0.30;
 
-        let dpad_cx = view_rect.x + view_rect.w * 0.25;
-        let dpad_cy = view_rect.y + view_rect.h * 0.50;
+        let btn_size = 32;
+        let stride = (view_rect.h * 0.30) as i32;
 
-        let a_cx = view_rect.x + view_rect.w * 0.70;
-        let b_cx = view_rect.x + view_rect.w * 0.875;
+        let dpad_cx = (view_rect.x + view_rect.w * 0.25) as i32;
+        let dpad_cy = (view_rect.y + view_rect.h * 0.50) as i32;
+
+        let a_cx = (view_rect.x + view_rect.w * 0.70) as i32;
+        let b_cx = (view_rect.x + view_rect.w * 0.875) as i32;
         let action_cy = dpad_cy;
 
         let dpad = Color::from_rgba(70, 70, 110, 255);
         let a_col = Color::from_rgba(170, 50, 50, 255);
         let b_col = Color::from_rgba(50, 90, 170, 255);
 
-        let make = |cx: f32, cy: f32, label, event, color| ButtonDef {
-            rect: Rect::new(cx - btn_size / 2.0, cy - btn_size / 2.0, btn_size, btn_size),
-            label,
-            event,
-            color,
+        let make = |grid_x: i32, grid_y: i32, id: ButtonId, color| {
+            let pos = i2(grid_x, grid_y);
+            ButtonDef {
+                rect: ir(pos * BUTTON_SIZE, BUTTON_SIZE),
+                id,
+                color,
+            }
         };
 
         let buttons = vec![
-            make(dpad_cx, dpad_cy - stride, "U", ButtonId::Up, dpad),
-            make(dpad_cx, dpad_cy + stride, "D", ButtonId::Down, dpad),
-            make(dpad_cx - stride, dpad_cy, "L", ButtonId::Left, dpad),
-            make(dpad_cx + stride, dpad_cy, "R", ButtonId::Right, dpad),
-            make(a_cx, action_cy, "A", ButtonId::A, a_col),
-            make(b_cx, action_cy, "B", ButtonId::B, b_col),
+            make(0, 1, ButtonId::Left, dpad),
+            make(1, 0, ButtonId::Up, dpad),
+            make(2, 1, ButtonId::Right, dpad),
+            make(1, 2, ButtonId::Down, dpad),
+            make(4, 1, ButtonId::A, dpad),
+            make(6, 1, ButtonId::B, dpad),
         ];
 
+        let view_rect = rect(
+            view_rect.x as i32,
+            view_rect.y as i32,
+            view_rect.w as i32,
+            view_rect.h as i32,
+        );
         Self { buttons, view_rect }
     }
 
     pub fn update(&self, buttons_state: &mut ButtonsState) {
+        let offset = self.view_rect.pos;
+
         // Mouse click
         if is_mouse_button_down(MouseButton::Left) {
             let (mx, my) = mouse_position();
-            let pos = Vec2::new(mx / SCALE, my / SCALE);
+            let pos = f2(mx / SCALE, my / SCALE).as_ivec2() - offset;
             for btn in &self.buttons {
                 if btn.rect.contains(pos) {
-                    //return Some(btn.event);
-                    buttons_state.set_button_state(btn.event, true);
+                    buttons_state.set_button_state(btn.id, true);
                 }
             }
         }
@@ -81,47 +102,26 @@ impl Buttons {
         for touch in touches() {
             if phases.contains(&touch.phase) {
                 for btn in &self.buttons {
-                    if btn.rect.contains(touch.position) {
-                        //return Some(btn.event);
-                        buttons_state.set_button_state(btn.event, true);
+                    let p = touch.position;
+                    let p = i2(p.x as i32, p.y as i32) - offset;
+                    if btn.rect.contains(p) {
+                        buttons_state.set_button_state(btn.id, true);
                     }
                 }
             }
         }
     }
 
-    pub fn draw(&self) {
-        draw_rectangle(
-            self.view_rect.x,
-            self.view_rect.y,
-            self.view_rect.w,
-            self.view_rect.h,
-            Color::from_rgba(25, 25, 35, 255),
-        );
-        draw_line(
-            self.view_rect.x,
-            self.view_rect.y,
-            self.view_rect.x + self.view_rect.w,
-            self.view_rect.y,
-            2.0,
-            Color::from_rgba(80, 80, 80, 255),
-        );
+    pub fn draw(&self, pane: &Pane) {
+        pane.clear_background(macroquad::color::DARKBLUE);
 
         for btn in &self.buttons {
-            draw_rectangle(btn.rect.x, btn.rect.y, btn.rect.w, btn.rect.h, btn.color);
-            draw_rectangle_lines(
-                btn.rect.x,
-                btn.rect.y,
-                btn.rect.w,
-                btn.rect.h,
-                2.0,
-                Color::from_rgba(200, 200, 200, 80),
-            );
-
-            let dims = measure_text(btn.label, None, 22, 1.0);
-            let tx = btn.rect.x + (btn.rect.w - dims.width) / 2.0;
-            let ty = btn.rect.y + (btn.rect.h + dims.height) / 2.0;
-            draw_text(btn.label, tx, ty, 22.0, WHITE);
+            draw_button(btn, pane);
         }
     }
+}
+
+fn draw_button(btn: &ButtonDef, pane: &Pane) {
+    pane.draw_rect(btn.rect.expand(-1), BLACK);
+    pane.draw_rect(btn.rect.expand(-2), btn.color);
 }

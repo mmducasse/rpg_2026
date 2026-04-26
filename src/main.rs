@@ -14,7 +14,7 @@ use crate::common::anim::pane::Pane;
 use crate::common::num::irect::rect;
 use crate::common::num::ivec2::{IVec2, i2};
 use crate::input::buttons::ButtonsState;
-use crate::ui::buttons::Buttons;
+use crate::ui::buttons::ButtonsUI;
 use crate::ui::game::Game;
 
 const GAME_SIZE_W: i32 = 16 * 10;
@@ -45,50 +45,20 @@ async fn main() {
     let buttons_pane = child_panes[1].clone();
 
     let mut game = Game::new(game_rect);
-    let buttons = Buttons::new(buttons_rect);
+    let buttons = ButtonsUI::new(buttons_rect);
 
     let mut buttons_state = ButtonsState::new();
 
-    // let render_target = render_target(PORTRAIT_W as u32, PORTRAIT_H as u32);
-    // render_target.texture.set_filter(FilterMode::Nearest);
-
-    // let mut camera =
-    //     Camera2D::from_display_rect(Rect::new(0.0, 0.0, PORTRAIT_W as f32, PORTRAIT_H as f32));
-    // camera.render_target = Some(render_target.clone());
-
+    // Main game loop.
     loop {
-        // Collect input: on-screen buttons take priority, then keyboard
         buttons_state.add_keyboard_state();
         buttons.update(&mut buttons_state);
 
         game.handle_buttons(&buttons_state);
         game.update(get_frame_time());
 
-        // Draw game content into the render target at logical resolution
-        //set_camera(&camera);
-        //clear_background(BLACK);
-        // game.draw();
-        // buttons.draw();
-        game_pane.clear_background(macroquad::color::YELLOW);
-        buttons_pane.clear_background(macroquad::color::BLUE);
-
-        // Scale the render target up to fill the window
-        //set_default_camera();
-        //clear_background(BLACK);
-        // draw_texture_ex(
-        //     &render_target.texture,
-        //     0.0,
-        //     0.0,
-        //     WHITE,
-        //     DrawTextureParams {
-        //         dest_size: Some(Vec2::new(
-        //             PORTRAIT_W as f32 * SCALE,
-        //             PORTRAIT_H as f32 * SCALE,
-        //         )),
-        //         flip_y: true,
-        //         ..Default::default()
-        //     },
-        // );
+        game.draw(&game_pane);
+        buttons.draw(&buttons_pane);
 
         buttons_state.advance();
         next_frame().await;
