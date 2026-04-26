@@ -15,7 +15,7 @@ use crate::common::num::irect::rect;
 use crate::common::num::ivec2::{IVec2, i2};
 use crate::input::buttons::ButtonsState;
 use crate::ui::buttons::ButtonsUI;
-use crate::ui::game::Game;
+use crate::ui::game::{Game, GameCtx};
 
 const GAME_SIZE_W: i32 = 16 * 10;
 const GAME_SIZE_H: i32 = 16 * 9;
@@ -36,16 +36,13 @@ fn window_conf() -> Conf {
 
 #[macroquad::main(window_conf)]
 async fn main() {
-    let game_rect = rect(0, 0, GAME_SIZE_W, GAME_SIZE_H);
-    let buttons_rect = rect(0, GAME_SIZE_H, PORTRAIT_W, PORTRAIT_H - GAME_SIZE_H);
-
     let window_pane = Pane::new(WINDOW_SIZE, SCALE);
     let child_panes = window_pane.split_y(&[GAME_SIZE_H]);
     let game_pane = child_panes[0].clone();
     let buttons_pane = child_panes[1].clone();
 
-    let mut game = Game::new(game_rect);
-    let buttons = ButtonsUI::new(buttons_rect);
+    let mut game = Game::new(game_pane.abs_bounds());
+    let buttons = ButtonsUI::new(buttons_pane.abs_bounds());
 
     let mut buttons_state = ButtonsState::new();
 
@@ -54,8 +51,10 @@ async fn main() {
         buttons_state.add_keyboard_state();
         buttons.update(&mut buttons_state);
 
-        game.handle_buttons(&buttons_state);
-        game.update(get_frame_time());
+        game.update(GameCtx {
+            delta_time: get_frame_time(),
+            buttons_state: &buttons_state,
+        });
 
         game.draw(&game_pane);
         buttons.draw(&buttons_pane);

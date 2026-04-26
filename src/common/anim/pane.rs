@@ -29,6 +29,10 @@ impl Pane {
         }
     }
 
+    pub fn abs_bounds(&self) -> IRect {
+        self.abs_bounds
+    }
+
     pub fn split_y(&self, sizes_y: &[i32]) -> Vec<Self> {
         let mut offset_y = 0;
         let mut children = vec![];

@@ -10,6 +10,7 @@ use crate::{
     },
     input::buttons::ButtonsState,
     objects::object::{Object, ObjectType, ObjectTypeMut},
+    ui::game::GameCtx,
 };
 
 const SPEED: i32 = 2;
@@ -28,8 +29,8 @@ impl Player {
         ir(self.pos, IVec2::splat(SIZE))
     }
 
-    pub fn update(&mut self, buttons_state: &ButtonsState) {
-        let dir = buttons_state.get_dpad();
+    pub fn update(&mut self, ctx: GameCtx) {
+        let dir = ctx.buttons_state.get_dpad();
 
         let delta = i2(dir.0 * SPEED, dir.1 * SPEED);
 

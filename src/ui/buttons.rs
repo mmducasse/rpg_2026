@@ -31,26 +31,8 @@ pub struct ButtonsUI {
 
 impl ButtonsUI {
     pub fn new(view_rect: IRect) -> Self {
-        let view_rect = macroquad::math::Rect::new(
-            view_rect.x() as f32,
-            view_rect.y() as f32,
-            view_rect.w() as f32,
-            view_rect.h() as f32,
-        );
-
-        let btn_size = 32;
-        let stride = (view_rect.h * 0.30) as i32;
-
-        let dpad_cx = (view_rect.x + view_rect.w * 0.25) as i32;
-        let dpad_cy = (view_rect.y + view_rect.h * 0.50) as i32;
-
-        let a_cx = (view_rect.x + view_rect.w * 0.70) as i32;
-        let b_cx = (view_rect.x + view_rect.w * 0.875) as i32;
-        let action_cy = dpad_cy;
-
         let dpad = Color::from_rgba(70, 70, 110, 255);
-        let a_col = Color::from_rgba(170, 50, 50, 255);
-        let b_col = Color::from_rgba(50, 90, 170, 255);
+        let ab_col = Color::from_rgba(50, 90, 170, 255);
 
         let make = |grid_x: i32, grid_y: i32, id: ButtonId, color| {
             let pos = i2(grid_x, grid_y);
@@ -66,16 +48,10 @@ impl ButtonsUI {
             make(1, 0, ButtonId::Up, dpad),
             make(2, 1, ButtonId::Right, dpad),
             make(1, 2, ButtonId::Down, dpad),
-            make(4, 1, ButtonId::A, dpad),
-            make(6, 1, ButtonId::B, dpad),
+            make(4, 1, ButtonId::A, ab_col),
+            make(6, 1, ButtonId::B, ab_col),
         ];
 
-        let view_rect = rect(
-            view_rect.x as i32,
-            view_rect.y as i32,
-            view_rect.w as i32,
-            view_rect.h as i32,
-        );
         Self { buttons, view_rect }
     }
 
